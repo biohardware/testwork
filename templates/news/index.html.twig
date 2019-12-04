@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello NewsController!{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+        <h1>News</h1>
+        {% if allNews %}
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Lead</th>
+                    <th>.</th>
+                    </thead>
+
+
+                    {% for news in allNews %}
+                        <tr>
+                            <td>{{ news.id }}</td>
+                            <td>{{ news.title }}</td>
+                            <td>{{ news.lead|length > 50 ? news.lead|slice(0, 50) ~ '...' : news.lead }}
+                            </td>
+                            <td><a href="{{ path('news_detail',{id:news.id}) }}">More</a></td>
+                        </tr>
+
+
+                    {% endfor %}
+                </table>
+            </div>
+        {% else %}
+            <h1>Nincs megjeleníthető hír</h1>
+            <p>Kérjük látogasson vissza később vagy <a>töltsön fel Ön egy hírt!</a></p>
+        {% endif %}
+    </div>
+{% endblock %}
