@@ -46,6 +46,11 @@
         </div>
     </nav>
     <div class="container">
+        {% if app.session.flashBag %}
+            {% for message in app.session.flashBag.get('success') %}
+                <b>{{ message }}</b> <br>
+            {% endfor %}
+        {% endif %}
         {% block body %}{% endblock %}
     </div>
         {% block javascripts %}{% endblock %}

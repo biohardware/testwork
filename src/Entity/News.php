@@ -49,6 +49,11 @@ class News
      */
     private $updateBy;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $extraFeed;
+
 
     public function getId(): ?int
     {
@@ -124,6 +129,18 @@ class News
     public function setUpdateBy(?User $updateBy): self
     {
         $this->updateBy = $updateBy;
+
+        return $this;
+    }
+
+    public function getExtraFeed(): ?string
+    {
+        return $this->extraFeed;
+    }
+
+    public function setExtraFeed(?string $extraFeed): self
+    {
+        $this->extraFeed = $extraFeed;
 
         return $this;
     }
