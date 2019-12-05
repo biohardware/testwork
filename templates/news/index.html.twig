@@ -37,7 +37,7 @@
                             <td>{{ news.title }}</td>
                             <td>{{ news.lead|length > 50 ? news.lead|slice(0, 50) ~ '...' : news.lead }}
                             </td>
-                            <td><a href="{{ path('news_detail',{id:news.id}) }}">More</a></td>
+                            <td><a href="{{ path('news_detail',{slug:news.slug}) }}">More</a></td>
                         </tr>
 
 

@@ -18,6 +18,8 @@
             <th>Visible</th>
             <th>CreatedBy</th>
             <th>UpdateBy</th>
+            <th>CreatedAt</th>
+            <th>UpdateAt</th>
             <th>Edit</th>
             <th>Delete</th>
 
@@ -33,9 +35,26 @@
                             Not visible
                             {% endif %}
                     </td>
-                    <td>{{ news.getCreatedBy }}</td>
-                    <td>{{ news.getUpdateBy }}</td>
-
+                    <td>
+                        {% if(news.getCreatedBy) %}
+                        {{ news.getCreatedBy.email }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if(news.getUpdateBy) %}
+                            {{ news.getUpdateBy.email }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if(news.getCreatedAt) %}
+                            {{ news.getCreatedAt|date }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if(news.getUpdateAt) %}
+                            {{ news.getUpdateAt|date() }}
+                        {% endif %}
+                    </td>
                     <td><a href="{{ path('app_admin_edit_news', {'news': news.id}) }}" class="btn btn-primary">Edit</a></td>
                     <td><a onclick="return confirm('Biztos, hogy törlöd?')"  href="{{ path('app_admin_delete_news', {'news': news.id}) }}" class="btn btn-danger">Delete</a></td>
                 </tr>

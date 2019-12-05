@@ -19,7 +19,7 @@ class NewsAddType extends AbstractType
             ->add('title', \Symfony\Component\Form\Extension\Core\Type\TextType::class,[
 
             ])
-            ->add('extraFeed')
+
             ->add('lead', TextareaType::class)
             ->add('body',TextareaType::class)
             ->add('visible',CheckboxType::class,[

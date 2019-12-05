@@ -50,9 +50,20 @@ class News
     private $updateBy;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $extraFeed;
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updateAt;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
 
 
     public function getId(): ?int
@@ -133,17 +144,42 @@ class News
         return $this;
     }
 
-    public function getExtraFeed(): ?string
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->extraFeed;
+        return $this->createdAt;
     }
 
-    public function setExtraFeed(?string $extraFeed): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->extraFeed = $extraFeed;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
+
+    public function getUpdateAt(): ?\DateTimeInterface
+    {
+        return $this->updateAt;
+    }
+
+    public function setUpdateAt(?\DateTimeInterface $updateAt): self
+    {
+        $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
 
 
 }

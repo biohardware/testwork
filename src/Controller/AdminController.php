@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\News;
 use App\Form\NewsAddType;
 use App\Repository\UserRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class AdminController extends AbstractController
     public function index(UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $allNews = $entityManager->getRepository(News::class)->findAll();
+
         return $this->render('admin/index.html.twig', [
             'allNews' => $allNews
         ]);
@@ -36,11 +38,40 @@ class AdminController extends AbstractController
     {
         if (!$news) {
             $news = new News();
+            $news->setCreatedBy($this->getUser());
+            $news->setCreatedAt(new \DateTime());
+
+        } else {
+            $news->setUpdateBy($this->getUser());
+            $news->setUpdateAt(new \DateTime());
         }
+        $slugify = new Slugify();
+        $title = $news->getTitle();
         $newsform = $this->createForm(NewsAddType::class, $news);
 
         $newsform->handleRequest($request);
         if ($newsform->isSubmitted() && $newsform->isValid()) {
+            $newTitle = $newsform->get('title')->getData();
+            if ($title != $newTitle) {
+                $tempSlug = $slugify->slugify($news->getTitle());
+                $checkslug = $entityManager
+                    ->getRepository(News::class)
+                    ->getSlugLike($tempSlug);
+                if ($checkslug) {
+                    if (is_numeric($checkslug['num'])) {
+                        $titleslug = $newTitle . "-" . ($checkslug['num'] + 1);
+                    } elseif (!is_numeric($checkslug['num']) && $checkslug['slug'] == $tempSlug) {
+                        $titleslug = $newTitle . "-" . 1;
+                    }
+
+                } else {
+                    $titleslug = $newTitle;
+                }
+                $news->setSlug(
+                    $slugify->slugify($titleslug)
+                );
+            }
+
 
             $entityManager->persist($news);
             $entityManager->flush();
@@ -53,6 +84,7 @@ class AdminController extends AbstractController
             'newsform' => $newsform->createView()
         ]);
     }
+
     /**
      * @Route("/delete/{news}", name="delete_news")
      */

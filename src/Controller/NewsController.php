@@ -32,11 +32,11 @@ class NewsController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="detail")
+     * @Route("/{slug}", name="detail")
      */
-    public function newsDetail(EntityManagerInterface $entityManager, $id)
+    public function newsDetail(EntityManagerInterface $entityManager, $slug = null)
     {
-        $thisNews = $entityManager->getRepository(News::class)->find($id);
+            $thisNews = $entityManager->getRepository(News::class)->findOneBy(['slug' => $slug]);
 
         return $this->render('news/detail.html.twig', [
             'thisNews' => $thisNews

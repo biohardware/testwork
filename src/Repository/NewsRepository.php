@@ -41,11 +41,26 @@ class NewsRepository extends ServiceEntityRepository
     public function findOneBySomeField($value): ?News
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
+            ->andWhere('n.slug % :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
     */
+
+    public function getSlugLike($value)
+    {
+        $qb = $this->createQueryBuilder('n');
+        $qb
+            ->select("SUBSTRING_INDEX(n.slug,'-',-1) AS num, n.slug")
+
+            ->andWhere($qb->expr()->like('n.slug',$qb->expr()->literal($value."%")))
+           // ->setParameter('val', $value)
+            ->orderBy('num','DESC')
+            ->setMaxResults(1)
+            ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+
 }
